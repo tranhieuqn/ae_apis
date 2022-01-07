@@ -127,6 +127,19 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>fully.qualified.MainClass</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>apis</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
