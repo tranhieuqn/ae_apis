@@ -1,0 +1,42 @@
+springdoc:
+  packagesToScan:
+    - com.aeshop.apis.controller
+
+server.port: 8080
+
+spring:
+  profiles:
+    active: "${SPRING_PROFILES_ACTIVE:local}"
+  jpa:
+    database: MYSQL
+    openInView: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        # https://docs.jboss.org/hibernate/stable/core.old/reference/en/html/configuration-optional.html
+        jdbc:
+          batch_size: 25
+          batch_versioned_data: true
+          time_zone: UTC
+        order_inserts: true
+        order_updates: true
+        show_sql: true
+        format_sql: true
+
+  # TODO: Datasource config
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://${AE_DB_URL:localhost}:3306/ae_db?useUnicode=yes&characterEncoding=utf-8&useSSL=${AE_DB_USE_SSL:true}&requireSSL=${AE_DB_REQUIRE_SSL:true}"
+    username: "${AE_DB_USER:root}"
+    password: "${AE_DB_PWD:root}"
+    hikari:
+      connectionTimeout: 30000
+      maxLifetime: 240000
+      maximumPoolSize: 50
+      minimumIdle: 5
+      idleTimeout: 230000
+      data-source-properties:
+        prep-stmt-cache-size: 250
+        prep-stmt-cache-sql-limit: 2048
+        cache-prep-stmts: true
+        use-server-prep-stmts: truE
