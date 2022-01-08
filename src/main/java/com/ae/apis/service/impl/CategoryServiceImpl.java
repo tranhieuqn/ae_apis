@@ -5,7 +5,6 @@ import com.ae.apis.controller.dto.CategoryResponse;
 import com.ae.apis.controller.dto.CategorySimpleResponse;
 import com.ae.apis.controller.query.base.QueryPredicate;
 import com.ae.apis.entity.Category;
-import com.ae.apis.entity.QCategory;
 import com.ae.apis.entity.enums.CategoryStatus;
 import com.ae.apis.repository.CategoryRepository;
 import com.ae.apis.service.CategoryService;
@@ -36,13 +35,16 @@ public class CategoryServiceImpl implements CategoryService {
 
   @Override
   public List<CategorySimpleResponse> getCategories(Long parentId) {
-    return buildCategorySimpleQuery(em).fetch();
+    if (parentId == null) {
+      return buildCategorySimpleQuery(em).where(category.parent.id.isNull()).fetch();
+    }
+    return buildCategorySimpleQuery(em).where(category.parent.id.eq(parentId)).fetch();
   }
 
   @Override
   public CategoryResponse getCategory(Long id) {
     var categoryResponse = buildCategoryResQuery(em)
-        .where(QCategory.category.id.eq(id))
+        .where(category.id.eq(id))
         .fetchOne();
     if (categoryResponse == null) {
       throw new RuntimeException("Category not found");

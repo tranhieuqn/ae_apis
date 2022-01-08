@@ -27,8 +27,8 @@ public class QueryPredicate {
     }
 
     public <T> Page<T> fetch(JPAQuery<T> query) {
-        long totalCount = query.fetchCount();
         query.where(predicate).orderBy(order);
+        long totalCount = query.fetchCount();
         int index = getIndex();
         int size = getSize();
         List<T> result = query.offset(index * size).limit(size).fetch();

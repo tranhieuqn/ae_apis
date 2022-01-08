@@ -25,13 +25,14 @@ public interface CategoryService {
   void updateCategory(Long id, CategoryRequest request);
 
   QCategory category = QCategory.category;
+  QCategory parent = new QCategory("parent");
 
   default JPAQuery<CategorySimpleResponse> buildCategorySimpleQuery(EntityManager em) {
-    var parent = new QCategory("parent");
     return new JPAQuery<CategorySimpleResponse>(em)
         .select(buildCategorySimpleBean())
         .from(category)
-        .leftJoin(parent).on(category.parent.eq(parent));
+        .leftJoin(parent).on(category.parent.eq(parent))
+        .orderBy(category.id.asc());
   }
 
   default QBean<CategorySimpleResponse> buildCategorySimpleBean() {

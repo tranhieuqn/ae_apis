@@ -28,7 +28,7 @@ public class ProductQueryParam extends QueryParam<ProductFilterParam> {
             builder.and(category.id.eq(filter.getCategoryId()));
         }
 
-        if (StringUtils.isBlank(filter.getName())) {
+        if (!StringUtils.isBlank(filter.getName())) {
             builder.and(category.name.likeIgnoreCase(filter.getName()));
         }
 

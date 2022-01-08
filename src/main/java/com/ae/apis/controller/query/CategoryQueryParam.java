@@ -10,11 +10,12 @@ public class CategoryQueryParam extends QueryParam<CategoryFilterParam> {
     @Override
     protected Predicate buildFilterPredicate(String timezone) {
         var category = QCategory.category;
-        var parent = new QCategory("parent");
+//        var parent = new QCategory("parent");
         var builder = new BooleanBuilder();
         var filter = super.getFilter();
 
         if (filter == null) {
+            builder.and(category.parent.id.isNull());
             return builder;
         }
 
@@ -23,7 +24,7 @@ public class CategoryQueryParam extends QueryParam<CategoryFilterParam> {
         }
 
         if (filter.getParentId() != null) {
-            builder.and(parent.id.eq(filter.getParentId()));
+            builder.and(category.parent.id.eq(filter.getParentId()));
         }
 
         return builder;
@@ -31,6 +32,6 @@ public class CategoryQueryParam extends QueryParam<CategoryFilterParam> {
 
     @Override
     protected OrderSpecifier<?> buildOrderClause() {
-        return QCategory.category.id.desc();
+        return QCategory.category.id.asc();
     }
 }
