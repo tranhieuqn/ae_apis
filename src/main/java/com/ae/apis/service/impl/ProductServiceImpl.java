@@ -1,5 +1,6 @@
 package com.ae.apis.service.impl;
 
+import com.ae.apis.config.error.NotFoundException;
 import com.ae.apis.controller.dto.ProductRequest;
 import com.ae.apis.controller.dto.ProductResponse;
 import com.ae.apis.controller.dto.ProductSimpleResponse;
@@ -44,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         .where(QProduct.product.id.eq(id))
         .fetchOne();
     if (productResponse == null) {
-      throw new RuntimeException();
+      throw new NotFoundException(Product.class, id);
     }
     productResponse.setMediaDetails(mediaService.getMediaDetails(productResponse.getMediaId()));
     return productResponse;
@@ -68,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
 
   private Category findCategory(ProductRequest request) {
     return categoryRepository.findById(request.getCategoryId())
-        .orElseThrow(() -> new RuntimeException());
+        .orElseThrow(() -> new NotFoundException(Category.class, request.getCategoryId()));
   }
 
   @Override
@@ -85,6 +86,6 @@ public class ProductServiceImpl implements ProductService {
   }
 
   private Product findProduct(Long id) {
-    return productRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    return productRepository.findById(id).orElseThrow(() -> new NotFoundException(Product.class, id));
   }
 }

@@ -1,5 +1,6 @@
 package com.ae.apis.service.impl;
 
+import com.ae.apis.config.error.NotFoundException;
 import com.ae.apis.controller.dto.CategoryRequest;
 import com.ae.apis.controller.dto.CategoryResponse;
 import com.ae.apis.controller.dto.CategorySimpleResponse;
@@ -73,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
       return null;
     }
     return categoryRepository.findById(request.getParentId())
-        .orElseThrow(() -> new RuntimeException());
+        .orElseThrow(() -> new NotFoundException(Category.class, request.getParentId()));
   }
 
   @Override
@@ -88,6 +89,6 @@ public class CategoryServiceImpl implements CategoryService {
 
   private Category findCategory(Long id) {
     return categoryRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException());
+        .orElseThrow(() -> new NotFoundException(Category.class, id));
   }
 }
