@@ -11,6 +11,9 @@ public class RestResponse<RestResponseBody> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private RestResponseBody body;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private PagingItem paging;
+
     public RestResponse() {
     }
 

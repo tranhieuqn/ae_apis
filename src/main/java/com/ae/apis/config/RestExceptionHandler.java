@@ -4,7 +4,6 @@ import com.ae.apis.config.error.ApiResponseStatus;
 import com.ae.apis.config.error.BusinessException;
 import com.ae.apis.config.error.NotFoundException;
 import com.ae.apis.config.error.dto.ErrorResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,7 +29,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleException(BusinessException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.BUSINESS_LOGIC_ERROR, ex.getMessage()));
@@ -38,7 +37,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> handleException(UsernameNotFoundException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.INVALID_AUTHORIZATION, ex.getMessage()));
@@ -46,7 +45,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> handleException(BadCredentialsException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.INVALID_AUTHORIZATION, ex.getMessage()));
@@ -54,7 +53,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleException(NotFoundException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.RESOURCE_NOT_FOUND, ex.getMessage()));
@@ -62,7 +61,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity<Object> handleException(InternalAuthenticationServiceException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.INVALID_AUTHORIZATION, ex.getMessage()));
@@ -70,7 +69,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleException(ValidationException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.VALIDATION_EXCEPTION, ex.getMessage()));
@@ -78,7 +77,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Object> handleException(MissingServletRequestParameterException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .badRequest()
                 .body(ErrorResponse.build(ApiResponseStatus.MISSING_REQUEST_PARAMETER, ex.getMessage()));
@@ -86,7 +85,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> handleException(MethodArgumentTypeMismatchException ex) {
-
+        ex.printStackTrace();
         Map<String, String> details = new HashMap<>();
         details.put("paramName", ex.getName());
         details.put("paramValue", ofNullable(ex.getValue()).map(Object::toString).orElse(""));
@@ -99,7 +98,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleException(MethodArgumentNotValidException ex) {
-
+        ex.printStackTrace();
         List<Map<String, String>> details = new ArrayList<>();
         ex.getBindingResult()
                 .getFieldErrors()
@@ -119,7 +118,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleException(AccessDeniedException ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponse.build(ApiResponseStatus.FORBIDDEN, ex.getMessage()));
@@ -127,7 +126,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception ex) {
-
+        ex.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.build(ApiResponseStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));

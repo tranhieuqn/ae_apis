@@ -1,16 +1,15 @@
 package com.ae.apis.controller;
 
+import com.ae.apis.config.error.ResponseBuilder;
+import com.ae.apis.config.error.dto.EmptyResponse;
+import com.ae.apis.config.error.dto.RestResponse;
 import com.ae.apis.controller.dto.CategoryRequest;
 import com.ae.apis.controller.dto.CategoryResponse;
 import com.ae.apis.controller.dto.CategorySimpleResponse;
 import com.ae.apis.controller.query.CategoryQueryParam;
-import com.ae.apis.config.error.ResponseBuilder;
-import com.ae.apis.config.error.dto.EmptyResponse;
-import com.ae.apis.config.error.dto.RestResponse;
 import com.ae.apis.service.CategoryService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +25,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/paging")
-    public RestResponse<Page<CategorySimpleResponse>> getCategories(@NotNull CategoryQueryParam queryParam) {
+    public RestResponse<List<CategorySimpleResponse>> getCategories(@NotNull CategoryQueryParam queryParam) {
         log.info("Get categories with param = [{}]", queryParam);
         return ResponseBuilder.build(categoryService.getCategories(queryParam.build(null)));
     }
