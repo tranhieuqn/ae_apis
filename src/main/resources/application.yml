@@ -21,14 +21,14 @@ spring:
         order_inserts: true
         order_updates: true
         show_sql: true
-        format_sql: true
+        format_sql: false
 
   # TODO: Datasource config
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://${AE_DB_URL:localhost}:3306/ae_db?useUnicode=yes&characterEncoding=utf-8&useSSL=${AE_DB_USE_SSL:true}&requireSSL=${AE_DB_REQUIRE_SSL:true}"
     username: "${AE_DB_USER:root}"
-    password: "${AE_DB_PWD:root}"
+    password: "${AE_DB_PWD:passw0rd}"
     hikari:
       connectionTimeout: 30000
       maxLifetime: 240000
@@ -39,4 +39,10 @@ spring:
         prep-stmt-cache-size: 250
         prep-stmt-cache-sql-limit: 2048
         cache-prep-stmts: true
-        use-server-prep-stmts: truE
+        use-server-prep-stmts: true
+
+# Security JWT
+security:
+  jwt:
+    secret: Akfdi=FnQ23FDSLSDf
+    expire: 864000000
