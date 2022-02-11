@@ -39,4 +39,10 @@ spring:
         prep-stmt-cache-size: 250
         prep-stmt-cache-sql-limit: 2048
         cache-prep-stmts: true
-        use-server-prep-stmts: truE
+        use-server-prep-stmts: true
+
+# Security JWT
+security:
+  jwt:
+    secret: Akfdi=FnQ23FDSLSDf
+    expire: 864000000
