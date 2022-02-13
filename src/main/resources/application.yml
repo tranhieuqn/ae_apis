@@ -46,3 +46,15 @@ security:
   jwt:
     secret: Akfdi=FnQ23FDSLSDf
     expire: 864000000
+
+# OTP
+auth:
+  otp:
+    expire: 30000
+
+sms:
+  android:
+    user:
+      hash: SoKWLGotnrt
+    doctor:
+      hash: rscww9bcRfE

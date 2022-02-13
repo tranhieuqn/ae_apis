@@ -25,9 +25,9 @@ public class JWTProvider {
                         format(
                                 "%s,%s,%s,%s",
                                 user.getId(),
+                                user.getPhoneNumber(),
                                 user.getEmail(),
-                                user.getName(),
-                                user.getPhoneNumber()
+                                user.getName()
                         )
                 )
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRE))

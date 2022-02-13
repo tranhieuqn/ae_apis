@@ -1,0 +1,19 @@
+otp:
+  sms:
+    api-key: XXXX
+    secret-key: XXXX
+    brand-name: XXXX
+    url: http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post_json/
+    mock-phone-number: +84983784489
+    error:
+      - {code: "100", message: "Request đã được nhận và xử lý thành công."}
+      - {code: "104", message: "Brandname không tồn tại hoặc đã bị hủy."}
+      - {code: "118", message: "Loại tin nhắn không hợp lệ."}
+      - {code: "119", message: "Brandname quảng cáo phải gửi ít nhất 20 số điện thoại."}
+      - {code: "131", message: "Tin nhắn brandname quảng cáo độ dài tối đa 422 kí tự."}
+      - {code: "132", message: "Không có quyền gửi tin nhắn đầu số cố định 8755."}
+      - {code: "99", message: "Lỗi không xác định."}
+      - {code: "177", message: "Brandname chưa đăng ký với nhà mạng."}
+      - {code: "145", message: "Sai template mạng xã hội."}
+      - {code: "146", message: "Sai template Brandname CSKH."}
+      - {code: "103", message: "Tài khoản không đủ tiền"}

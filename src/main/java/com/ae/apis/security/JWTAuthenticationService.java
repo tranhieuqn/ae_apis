@@ -1,8 +1,8 @@
 package com.ae.apis.security;
 
 
-import com.ae.apis.controller.dto.LoginRequest;
 import com.ae.apis.controller.dto.LoginResponse;
+import com.ae.apis.controller.dto.UserAccountVerifyRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,11 +22,11 @@ public class JWTAuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public LoginResponse authenticate(LoginRequest request) {
+    public LoginResponse authenticate(UserAccountVerifyRequest request) {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        request.getPhoneNumber(),
+                        request.getVerifyCode()
                 )
         );
 

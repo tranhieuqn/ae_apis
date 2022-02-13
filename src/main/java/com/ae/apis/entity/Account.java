@@ -6,6 +6,7 @@ import com.ae.apis.entity.enums.LoginStatus;
 import com.ae.apis.entity.enums.RegisterStatus;
 import com.ae.apis.entity.enums.UserRole;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 
@@ -52,6 +53,15 @@ public class Account extends BaseEntity {
     private String address;
 
     public String getFullName() {
-        return lastName.concat(" ").concat(firstName).trim();
+        if(!StringUtils.isEmpty(lastName) && !StringUtils.isEmpty(firstName)) {
+            return lastName.concat(" ").concat(firstName).trim();
+        } else if(!StringUtils.isEmpty(lastName)){
+            return lastName;
+        } else if(!StringUtils.isEmpty(firstName)){
+            return firstName;
+        }
+        return null;
+
+
     }
 }

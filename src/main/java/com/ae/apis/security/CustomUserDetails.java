@@ -22,7 +22,7 @@ public class CustomUserDetails extends User {
                              String email,
                              String password,
                              Collection<? extends GrantedAuthority> authorities) {
-        super(email, password, authorities);
+        super(phoneNumber, password, authorities);
 
         this.id = id;
         this.email = email;
