@@ -4,6 +4,7 @@ import com.ae.apis.controller.dto.ProductRequest;
 import com.ae.apis.controller.dto.ProductResponse;
 import com.ae.apis.controller.dto.ProductSimpleResponse;
 import com.ae.apis.controller.query.base.QueryPredicate;
+import com.ae.apis.entity.Product;
 import com.ae.apis.entity.QCategory;
 import com.ae.apis.entity.QProduct;
 import com.querydsl.core.types.Projections;
@@ -62,4 +63,6 @@ public interface ProductService {
         product.media.id.as("mediaId")
     );
   }
+
+  Product findProductById(Long productId);
 }

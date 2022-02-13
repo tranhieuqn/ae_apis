@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.OffsetDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,5 +19,5 @@ public class OrderSimpleResponse {
   private Long userId;
   private String refNumber;
   private OrderStatus status;
-  private Long orderDate;
+  private OffsetDateTime orderDate;
 }

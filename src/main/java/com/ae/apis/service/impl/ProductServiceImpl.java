@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -87,5 +89,10 @@ public class ProductServiceImpl implements ProductService {
 
   private Product findProduct(Long id) {
     return productRepository.findById(id).orElseThrow(() -> new NotFoundException(Product.class, id));
+  }
+
+  @Override
+  public Product findProductById(Long productId) {
+    return findProduct(productId);
   }
 }
