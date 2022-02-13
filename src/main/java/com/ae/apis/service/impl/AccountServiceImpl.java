@@ -23,6 +23,8 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
 
+    private static final String TEST_VERIFY_CODE = "0000";
+
     @Autowired
     private AccountRepository repository;
 
@@ -65,12 +67,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Long register(UserRegisterRequest request) {
         String phoneNumber = request.getPhoneNumber();
-        String verifyCode;
-        if (phoneNumber.contains(properties.getMockPhoneNumber())) {
-            verifyCode = "9430";
-        } else {
-            verifyCode = randomCodeGenerator.generateCode(4, 0);
-        }
+        String verifyCode = TEST_VERIFY_CODE;
+//        if (phoneNumber.contains(properties.getMockPhoneNumber())) {
+//            verifyCode = "9430";
+//        } else {
+//            verifyCode = randomCodeGenerator.generateCode(4, 0);
+//        }
 
         Account user = repository.findByPhoneNumberAndUserRole(phoneNumber, UserRole.ROLE_USER)
                 .orElseGet(
@@ -124,12 +126,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Long login(LoginRequest request) {
         String phoneNumber = request.getPhoneNumber();
-        String verifyCode;
-        if (phoneNumber.contains(properties.getMockPhoneNumber())) {
-            verifyCode = "9430";
-        } else {
-            verifyCode = randomCodeGenerator.generateCode(4, 0);
-        }
+        String verifyCode = TEST_VERIFY_CODE;
+//        if (phoneNumber.contains(properties.getMockPhoneNumber())) {
+//            verifyCode = "9430";
+//        } else {
+//            verifyCode = randomCodeGenerator.generateCode(4, 0);
+//        }
 
         Account user = repository.findByPhoneNumber(phoneNumber).orElseThrow(
                 () -> new NotFoundException(Account.class, request.getPhoneNumber())
