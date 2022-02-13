@@ -98,8 +98,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public LoginResponse verifyAccount(UserAccountVerifyRequest request) {
-
-        Optional<Account> userOpt = repository.findByPhoneNumberAndUserRole(request.getPhoneNumber(), UserRole.ROLE_USER);
+        Optional<Account> userOpt = repository.findByPhoneNumber(request.getPhoneNumber());
         if (userOpt.isEmpty()) {
             throw new NotFoundException(Account.class, request.getPhoneNumber());
         }
@@ -108,6 +107,8 @@ public class AccountServiceImpl implements AccountService {
         if (!confirmationTokenService.confirmationTokenVerified(user.getId(), request.getVerifyCode(), request.getVerifyType())) {
             throw new BusinessException("Confirmation token not found or expired");
         }
+
+        user.setRegisterStatus(RegisterStatus.COMPLETED);
         user.setLoginStatus(LoginStatus.LOGIN);
         repository.save(user);
 
@@ -130,7 +131,7 @@ public class AccountServiceImpl implements AccountService {
             verifyCode = randomCodeGenerator.generateCode(4, 0);
         }
 
-        Account user = repository.findByPhoneNumberAndUserRole(phoneNumber, UserRole.ROLE_USER).orElseThrow(
+        Account user = repository.findByPhoneNumber(phoneNumber).orElseThrow(
                 () -> new NotFoundException(Account.class, request.getPhoneNumber())
         );
 
