@@ -2,6 +2,7 @@ package com.ae.apis.repository.custom;
 
 import com.ae.apis.controller.dto.OrderDetailResponse;
 import com.ae.apis.controller.dto.ProductSimpleResponse;
+import com.ae.apis.entity.QCategory;
 import com.ae.apis.entity.QOrderDetail;
 import com.ae.apis.entity.QProduct;
 import com.querydsl.core.types.Projections;
@@ -16,12 +17,14 @@ public interface CustomOrderDetailRepository {
 
     QOrderDetail orderDetail = QOrderDetail.orderDetail;
     QProduct product = QProduct.product;
+    QCategory category = QCategory.category;
 
     default JPAQuery<OrderDetailResponse> buildOrderDetailQuery(EntityManager em) {
         return new JPAQuery<OrderDetailResponse>(em)
                 .select(buildOrderDetailBean())
                 .from(orderDetail)
                 .innerJoin(product).on(product.id.eq(orderDetail.product.id))
+                .innerJoin(category).on(product.category.eq(category))
                 .orderBy(orderDetail.id.asc());
     }
 
@@ -33,9 +36,14 @@ public interface CustomOrderDetailRepository {
                 Projections.bean(
                         ProductSimpleResponse.class,
                         product.id,
-                        product.category.id.as("categoryId"),
+                        category.id.as("categoryId"),
+                        category.name.as("categoryName"),
                         product.name,
-                        product.thumbnail
+                        product.description,
+                        product.price,
+                        product.thumbnail,
+                        product.status,
+                        product.media.id.as("mediaId")
                 ).as("product"),
                 orderDetail.quantity,
                 orderDetail.unitPrice

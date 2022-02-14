@@ -37,8 +37,13 @@ public interface ProductService {
         ProductSimpleResponse.class,
         product.id,
         category.id.as("categoryId"),
+        category.name.as("categoryName"),
         product.name,
-        product.thumbnail
+        product.description,
+        product.price,
+        product.thumbnail,
+        product.status,
+        product.media.id.as("mediaId")
     );
   }
 
