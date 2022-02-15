@@ -1,0 +1,17 @@
+payment:
+  vnpay:
+    env: dev
+    dev:
+      vnp-version: 2.0.0
+      vnp-tmn-code: TELEDOC1
+      vnp-hash-secret: IBSOCPFEXJBAQTVBNVLFFTEFOVOQRGLR
+      vnp-pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      vnp-return-url: https://sandbox.vnpayment.vn/merchant_webapi/merchant.html
+      vnp-refund-email: teledoc@gmail.com
+    prod:
+      vnp-version: 2.0.0
+      vnp-tmn-code:  TELEDOC1
+      vnp-hash-secret:  LZJJROYGRMDNDXXXVDSLXMOHEVZXXCDY
+      vnp-pay-url:  https://pay.vnpay.vn/vpcpay.html
+      vnp-return-url:  https://merchant.vnpay.vn/merchant_webapi/merchant.html
+      vnp-refund-email: teledoc@gmail.com

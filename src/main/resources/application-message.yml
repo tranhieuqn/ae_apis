@@ -1,0 +1,20 @@
+payment:
+  vnpay:
+    message:
+      - { code: "00" , message: "Giao d?ch thành công." }
+      - { code: "01" , message: "Giao d?ch ?ã t?n t?i." }
+      - { code: "02" , message: "Merchant không h?p l?." }
+      - { code: "03" , message: "D? li?u g?i sang không ?úng ??nh d?ng." }
+      - { code: "04" , message: "Kh?i t?o GD không thành công do Website ?ang b? t?m khóa." }
+      - { code: "05" , message: "Giao d?ch không thành công do: Quý khách nh?p sai m?t kh?u quá s? l?n quy ??nh. Xin quý khách vui lòng th?c hi?n l?i giao d?ch." }
+      - { code: "13" , message: "Giao d?ch không thành công do Quý khách nh?p sai m?t kh?u xác th?c giao d?ch (OTP). Xin quý khách vui lòng th?c hi?n l?i giao d?ch." }
+      - { code: "07" , message: "Giao d?ch b? nghi ng? là giao d?ch gian l?n." }
+      - { code: "09" , message: "Giao d?ch không thành công do: Th?/Tài kho?n c?a khách hàng ch?a ??ng ký d?ch v? InternetBanking t?i ngân hàng." }
+      - { code: "10" , message: "Giao d?ch không thành công do: Khách hàng xác th?c thông tin th?/tài kho?n không ?úng quá 3 l?n." }
+      - { code: "11" , message: "Giao d?ch không thành công do: ?ã h?t h?n ch? thanh toán. Xin quý khách vui lòng th?c hi?n l?i giao d?ch." }
+      - { code: "12" , message: "Giao d?ch không thành công do: Th?/Tài kho?n c?a khách hàng b? khóa." }
+      - { code: "51" , message: "Giao d?ch không thành công do: Tài kho?n c?a quý khách không ?? s? d? ?? th?c hi?n giao d?ch." }
+      - { code: "65" , message: "Giao d?ch không thành công do: Tài kho?n c?a Quý khách ?ã v??t quá h?n m?c giao d?ch trong ngày." }
+      - { code: "08" , message: "Giao d?ch không thành công do: H? th?ng Ngân hàng ?ang b?o trì. Xin quý khách t?m th?i không th?c hi?n giao d?ch b?ng th?/tài kho?n c?a Ngân hàng này." }
+      - { code: "99" , message: "Giao d?ch th?t b?i." }
+
