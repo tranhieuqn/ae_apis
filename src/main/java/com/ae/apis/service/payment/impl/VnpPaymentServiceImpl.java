@@ -32,8 +32,6 @@ import static com.ae.apis.common.Constants.VNPAY_REFUND_TYPE.ALL_AMOUNT;
 public class VnpPaymentServiceImpl implements VnpPaymentService {
     private static final Logger logger = LoggerFactory.getLogger(VnpPaymentService.class);
 
-    private static final String VNPAY_MESSAGE_PREFIX = "vnpay.";
-
     private static final String PAYMENT_FAILED_MSG = "Giao dịch thất bại.";
 
     @Autowired
@@ -189,7 +187,7 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
                 return CheckPaymentProcessResponse.ofPaymentFailed();
             }
 
-            String responseMsg = messageUtils.getMessage(VNPAY_MESSAGE_PREFIX.concat(ipnResCode));
+            String responseMsg = messageUtils.getMessage(ipnResCode);
             if (responseMsg == null) {
                 responseMsg = PAYMENT_FAILED_MSG;
             }

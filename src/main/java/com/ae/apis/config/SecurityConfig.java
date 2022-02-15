@@ -55,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authentication/login").permitAll()
                 .antMatchers("/authentication/register").permitAll()
                 .antMatchers("/authentication/verify-account").permitAll()
+                .antMatchers("/api/payment/vnp/return").permitAll()
+                .antMatchers("/api/payment/vnp/ipn").permitAll()
                 .antMatchers("/v2/api-docs").permitAll()
                 .antMatchers("/api/docs").permitAll()
                 // Our private endpoints
