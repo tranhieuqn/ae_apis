@@ -3,8 +3,8 @@ payment:
     env: dev
     dev:
       vnp-version: 2.0.0
-      vnp-tmn-code: N18Z5MWR
-      vnp-hash-secret: WLODMUXPSWVOASPKIIECMHCVFNBQCAMB
+      vnp-tmn-code: TELEDOC1
+      vnp-hash-secret: IBSOCPFEXJBAQTVBNVLFFTEFOVOQRGLR
       vnp-pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
       vnp_api_url: https://sandbox.vnpayment.vn/merchant_webapi/merchant.html
       vnp-return-url: http://localhost:8080/api/payment/vnp/return
