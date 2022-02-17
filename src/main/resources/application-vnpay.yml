@@ -8,7 +8,7 @@ payment:
       vnp-pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
       vnp_api_url: https://sandbox.vnpayment.vn/merchant_webapi/merchant.html
       vnp-return-url: http://localhost:8080/api/payment/vnp/return
-      vnp-refund-email: teledoc@gmail.com
+      vnp-refund-email: xuanhongkim@gmail.com
     prod:
       vnp-version: 2.0.0
       vnp-tmn-code: N18Z5MWR
@@ -16,4 +16,4 @@ payment:
       vnp-pay-url: https://pay.vnpay.vn/vpcpay.html
       vnp_api_url: https://merchant.vnpay.vn/merchant_webapi/merchant.html
       vnp-return-url: #TODO:
-      vnp-refund-email: teledoc@gmail.com
+      vnp-refund-email: xuanhongkim@gmail.com
