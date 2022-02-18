@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.ae.apis.entity.enums.PropertyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,7 +48,7 @@ public class Property extends BaseEntity {
 
   @Column(name = "status")
   @Enumerated(EnumType.STRING)
-  private ProductStatus status;
+  private PropertyStatus status;
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "media_id")
