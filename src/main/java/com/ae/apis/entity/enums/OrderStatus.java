@@ -1,5 +1,5 @@
 package com.ae.apis.entity.enums;
 
 public enum OrderStatus {
-    SUBMITTED, SHIPPING, COMPLETED, CANCELED
+    PAYMENT_PROCESSING, SUBMITTED, SHIPPING, COMPLETED, CANCELED
 }

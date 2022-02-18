@@ -37,13 +37,6 @@ public class OrderController {
         return ResponseBuilder.build(orderService.getOrder(id));
     }
 
-    @PostMapping
-    public RestResponse<?> createOrder(@Valid @RequestBody OrderRequest request) {
-        log.info("Create order with request = [{}]", request);
-        orderService.createOrder(request);
-        return EmptyResponse.instance;
-    }
-
     @PostMapping("/submit")
     public RestResponse<?> submitOrder(@Valid @RequestBody OrderRequest request) {
         log.info("Submit order with request = [{}]", request);

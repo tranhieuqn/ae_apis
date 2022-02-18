@@ -49,4 +49,10 @@ public class Order extends BaseEntity {
 
   @Column(name = "order_date")
   private OffsetDateTime orderDate;
+
+  @Column(name = "payment_id")
+  public Long paymentId;
+
+  @Column(name = "completed_time")
+  private OffsetDateTime completedTime;
 }

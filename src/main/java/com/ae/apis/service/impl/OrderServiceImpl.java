@@ -1,9 +1,12 @@
 package com.ae.apis.service.impl;
 
+import com.ae.apis.config.error.BusinessException;
 import com.ae.apis.config.error.NotFoundException;
 import com.ae.apis.controller.dto.*;
 import com.ae.apis.controller.query.base.QueryPredicate;
 import com.ae.apis.entity.Order;
+import com.ae.apis.entity.Payment;
+import com.ae.apis.entity.enums.OrderStatus;
 import com.ae.apis.entity.enums.PaymentType;
 import com.ae.apis.repository.OrderRepository;
 import com.ae.apis.security.AuthenticationUtils;
@@ -67,50 +70,84 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void createOrder(OrderRequest request) {
+    public Order createOrder(OrderRequest request, Payment payment) {
         Order order = new Order();
         Long userId = AuthenticationUtils.getUserId();
         order.setUserId(userId);
-        order.setRefNumber(request.getRefNumber());
-        order.setStatus(request.getStatus());
+        String refNumber = randomCodeGenerator.generateCode(10, 10);
+        order.setRefNumber(refNumber);
+        order.setStatus(OrderStatus.PAYMENT_PROCESSING);
         order.setNote(request.getNote());
         order.setPhone(request.getPhone());
         order.setAddress(request.getAddress());
         order.setOrderDate(OffsetDateTime.now());
+        order.setPaymentId(payment.getId());
 
         var saved = repository.save(order);
         orderDetailService.createOrderDetails(saved, request.getOrderDetails());
+
+        return saved;
     }
 
     @Override
+    @Transactional
     public void updateOrder(Long id, OrderRequest request) {
         var order = repository.findById(id).orElseThrow(
                 () -> new NotFoundException(Order.class, id)
         );
 
-        order.setRefNumber(request.getRefNumber());
+        if (!isNextStatus(order.getStatus(), request.getStatus())) {
+            throw new BusinessException("Order status change does not match.");
+        }
+
         order.setStatus(request.getStatus());
         order.setNote(request.getNote());
-        order.setPhone(request.getPhone());
-        order.setAddress(request.getAddress());
-        order.setOrderDate(OffsetDateTime.now());
 
-        orderDetailService.updateOrderDetails(order, request.getOrderDetails());
+        repository.save(order);
+    }
+
+    public Boolean isNextStatus(OrderStatus current, OrderStatus status) {
+        if (OrderStatus.PAYMENT_PROCESSING.equals(status)
+                || OrderStatus.COMPLETED.equals(current)
+                || OrderStatus.CANCELED.equals(current)) {
+            return false;
+        }
+
+        if (OrderStatus.PAYMENT_PROCESSING.equals(current)
+                && !(OrderStatus.SUBMITTED.equals(status) || OrderStatus.CANCELED.equals(status))) {
+            return false;
+        }
+
+        if (OrderStatus.SUBMITTED.equals(current)
+                && !(OrderStatus.SHIPPING.equals(status) || OrderStatus.CANCELED.equals(status))) {
+            return false;
+        }
+
+        if (OrderStatus.SHIPPING.equals(current)
+                && !(OrderStatus.COMPLETED.equals(status) || OrderStatus.CANCELED.equals(status))) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public OrderRes submitOrder(OrderRequest request) {
-        this.createOrder(request);
         Long userId = AuthenticationUtils.getUserId();
-        BigDecimal originalFee = new BigDecimal(50000);
-        for (OrderDetailRequest item: request.getOrderDetails()) {
-            originalFee = originalFee.add(BigDecimal.valueOf(item.getQuantity()).multiply(item.getUnitPrice()));
+
+        BigDecimal originalFee = new BigDecimal(0);
+        if (request.getOrderDetails() != null || !request.getOrderDetails().isEmpty()) {
+            for (OrderDetailRequest item : request.getOrderDetails()) {
+                originalFee = originalFee.add(BigDecimal.valueOf(item.getQuantity()).multiply(item.getUnitPrice()));
+            }
         }
 
-        String code = randomCodeGenerator.generateCode(10,10);
+        String code = randomCodeGenerator.generateCode(10, 10);
         PaymentCreatedRes paymentCreatedRes = paymentService.createPayment(
                 PaymentType.VNPAY, userId, originalFee.longValue(), originalFee.longValue(), code, "ORDER"
         );
+
+        this.createOrder(request, paymentCreatedRes.getPayment());
 
         return OrderRes.ofSuccess(paymentCreatedRes.getPaymentUrl());
     }

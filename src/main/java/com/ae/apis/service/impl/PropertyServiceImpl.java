@@ -15,6 +15,7 @@ import com.ae.apis.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -42,6 +43,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Transactional
     public PropertyResponse createProperty(PropertyRequest request) {
         Property property = new Property();
         property.setName(request.getName());
@@ -70,6 +72,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Transactional
     public PropertyResponse updateProperty(Long id, PropertyRequest request) {
         Property property = getPropertyById(id);
         property.setName(request.getName());

@@ -1,7 +1,13 @@
 package com.ae.apis.service.payment.impl;
 
+import com.ae.apis.config.error.NotFoundException;
+import com.ae.apis.entity.Order;
+import com.ae.apis.entity.Payment;
 import com.ae.apis.entity.PaymentVNP;
+import com.ae.apis.entity.enums.OrderStatus;
 import com.ae.apis.entity.enums.PaymentStatus;
+import com.ae.apis.repository.OrderRepository;
+import com.ae.apis.repository.PaymentRepository;
 import com.ae.apis.repository.VnpPaymentRepository;
 import com.ae.apis.service.payment.VnpPaymentService;
 import com.ae.apis.service.payment.common.CommonUtils;
@@ -21,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -45,6 +52,12 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
 
     @Autowired
     protected RestTemplate restTemplate;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     private final DateTimeUtils dateTimeUtil = DateTimeUtils.getInstance();
 
@@ -118,6 +131,7 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
     }
 
     @Override
+    @Transactional
     public PaymentIPNProcessResponse paymentIPNProcess(Map<String, String> payload) {
         try {
             if (!validChecksum(payload)) {
@@ -125,12 +139,12 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
             }
 
             String vnpTxnRef = payload.get("vnp_TxnRef");
-            Optional<PaymentVNP> paymentOpt = vnpPaymentRepository.findByVnpTxnRef(vnpTxnRef);
-            if (paymentOpt.isEmpty()) {
+            Optional<PaymentVNP> paymentVNPOpt = vnpPaymentRepository.findByVnpTxnRef(vnpTxnRef);
+            if (paymentVNPOpt.isEmpty()) {
                 return PaymentIPNProcessResponse.ofOrderNotFound();
             }
 
-            PaymentVNP paymentVNP = paymentOpt.get();
+            PaymentVNP paymentVNP = paymentVNPOpt.get();
             if (paymentVNP.getPayment().alreadyProcessed()) {
                 return PaymentIPNProcessResponse.ofOrderAlreadyConfirmed();
             }
@@ -144,7 +158,20 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
             if ("00".equals(ipnResCode)) {
                 switch (paymentVNP.getVnpOrderType()) {
                     case "ORDER":
-                        //TODO: do somethings
+                        Order order = orderRepository.findOrderByVnpTxnRef(vnpTxnRef).orElseThrow(
+                                ()-> new NotFoundException(String.format("Order with vnpTxnRef=%s not found", vnpTxnRef))
+                        );
+                        order.setStatus(OrderStatus.SUBMITTED);
+                        order.setCompletedTime(OffsetDateTime.now());
+                        orderRepository.save(order);
+
+                        // update payment status
+                        Optional<Payment> paymentOpt = paymentRepository.findById(order.getPaymentId());
+                        if (paymentOpt.isPresent() && PaymentStatus.NOT_PAYMENT_YET.equals(paymentOpt.get().getStatus())) {
+                            Payment payment = paymentOpt.get();
+                            payment.setStatus(PaymentStatus.PAYMENT_SUCCESS);
+                            paymentRepository.save(payment);
+                        }
                         break;
                     default:
                         throw new Exception("Order type not found.");
@@ -257,6 +284,7 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
         return signValue.equals(vnp_SecureHash);
     }
 
+    @Transactional
     private void savePaymentInfo(PaymentVNP paymentVNP, Map<String, String> payload, String ipnResCode) {
         paymentVNP.setVnpBankCode(payload.get("vnp_BankCode"));
         paymentVNP.setVnpBankTranNo(payload.get("vnp_BankTranNo"));
