@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS `payment_refund_history` (
     `amount`                DECIMAL(20,5) UNSIGNED NULL,
     `description`           TEXT NULL,
     `created_date`          TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3),
-    `modified_date`         TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3)
+    `modified_date`         TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3),
+    FOREIGN KEY `fk__payment_refund_history__payment`(`payment_id`) REFERENCES `payment`(`id`)
 )
 ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -52,7 +53,8 @@ CREATE TABLE IF NOT EXISTS `payment_vnp` (
     `vnp_response_code`     VARCHAR(250) NULL,
     `vnp_transaction_no`    VARCHAR(250) NULL,
     `created_date`          TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3),
-    `modified_date`         TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3)
+    `modified_date`         TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP(3),
+    FOREIGN KEY `fk__payment_vnp__payment`(`payment_id`) REFERENCES `payment`(`id`)
 )
 ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
