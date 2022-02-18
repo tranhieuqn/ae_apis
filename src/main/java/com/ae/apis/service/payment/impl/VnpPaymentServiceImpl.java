@@ -143,7 +143,7 @@ public class VnpPaymentServiceImpl implements VnpPaymentService {
             String ipnResCode = payload.get("vnp_ResponseCode");
             if ("00".equals(ipnResCode)) {
                 switch (paymentVNP.getVnpOrderType()) {
-                    case "BOOKING":
+                    case "ORDER":
                         //TODO: do somethings
                         break;
                     default:

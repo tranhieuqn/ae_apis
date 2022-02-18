@@ -1,10 +1,7 @@
 package com.ae.apis.service.impl;
 
 import com.ae.apis.config.error.NotFoundException;
-import com.ae.apis.controller.dto.OrderDetailRequest;
-import com.ae.apis.controller.dto.OrderRequest;
-import com.ae.apis.controller.dto.OrderResponse;
-import com.ae.apis.controller.dto.OrderSimpleResponse;
+import com.ae.apis.controller.dto.*;
 import com.ae.apis.controller.query.base.QueryPredicate;
 import com.ae.apis.entity.Order;
 import com.ae.apis.entity.enums.PaymentType;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -103,21 +99,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PaymentCreatedRes submitOrder(OrderRequest request) {
+    public OrderRes submitOrder(OrderRequest request) {
         this.createOrder(request);
         Long userId = AuthenticationUtils.getUserId();
-        BigDecimal originalFee = new BigDecimal(0);
-        for (OrderDetailRequest item: request.getOrderDetails()){
+        BigDecimal originalFee = new BigDecimal(50000);
+        for (OrderDetailRequest item: request.getOrderDetails()) {
             originalFee = originalFee.add(BigDecimal.valueOf(item.getQuantity()).multiply(item.getUnitPrice()));
         }
-        String code = randomCodeGenerator.generateCode(4,4);
 
-
+        String code = randomCodeGenerator.generateCode(10,10);
         PaymentCreatedRes paymentCreatedRes = paymentService.createPayment(
-                PaymentType.VNPAY, userId, originalFee.longValue(), originalFee.longValue(), code, "order"
+                PaymentType.VNPAY, userId, originalFee.longValue(), originalFee.longValue(), code, "ORDER"
         );
 
-        return paymentCreatedRes;
+        return OrderRes.ofSuccess(paymentCreatedRes.getPaymentUrl());
     }
 
 }
