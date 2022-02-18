@@ -1,21 +1,28 @@
 package com.ae.apis.service.impl;
 
 import com.ae.apis.config.error.NotFoundException;
+import com.ae.apis.controller.dto.OrderDetailRequest;
 import com.ae.apis.controller.dto.OrderRequest;
 import com.ae.apis.controller.dto.OrderResponse;
 import com.ae.apis.controller.dto.OrderSimpleResponse;
 import com.ae.apis.controller.query.base.QueryPredicate;
 import com.ae.apis.entity.Order;
+import com.ae.apis.entity.enums.PaymentType;
 import com.ae.apis.repository.OrderRepository;
 import com.ae.apis.security.AuthenticationUtils;
 import com.ae.apis.service.OrderDetailService;
 import com.ae.apis.service.OrderService;
+import com.ae.apis.service.payment.PaymentService;
+import com.ae.apis.service.payment.dto.PaymentCreatedRes;
+import com.ae.apis.utils.RandomCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -25,6 +32,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private RandomCodeGenerator randomCodeGenerator;
 
     @Override
     public Page<OrderSimpleResponse> getOrders(QueryPredicate queryPredicate) {
@@ -60,7 +73,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void createOrder(OrderRequest request) {
         Order order = new Order();
-        //TODO: set userId
+        Long userId = AuthenticationUtils.getUserId();
+        order.setUserId(userId);
         order.setRefNumber(request.getRefNumber());
         order.setStatus(request.getStatus());
         order.setNote(request.getNote());
@@ -86,6 +100,24 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(OffsetDateTime.now());
 
         orderDetailService.updateOrderDetails(order, request.getOrderDetails());
+    }
+
+    @Override
+    public PaymentCreatedRes submitOrder(OrderRequest request) {
+        this.createOrder(request);
+        Long userId = AuthenticationUtils.getUserId();
+        BigDecimal originalFee = new BigDecimal(0);
+        for (OrderDetailRequest item: request.getOrderDetails()){
+            originalFee = originalFee.add(BigDecimal.valueOf(item.getQuantity()).multiply(item.getUnitPrice()));
+        }
+        String code = randomCodeGenerator.generateCode(4,4);
+
+
+        PaymentCreatedRes paymentCreatedRes = paymentService.createPayment(
+                PaymentType.VNPAY, userId, originalFee.longValue(), originalFee.longValue(), code, "order"
+        );
+
+        return paymentCreatedRes;
     }
 
 }

@@ -8,6 +8,7 @@ import com.ae.apis.controller.dto.OrderResponse;
 import com.ae.apis.controller.dto.OrderSimpleResponse;
 import com.ae.apis.controller.query.OrderQueryParam;
 import com.ae.apis.service.OrderService;
+import com.ae.apis.service.payment.dto.PaymentCreatedRes;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,13 @@ public class OrderController {
         log.info("Create order with request = [{}]", request);
         orderService.createOrder(request);
         return EmptyResponse.instance;
+    }
+
+    @PostMapping("/submit")
+    public RestResponse<?> submitOrder(@Valid @RequestBody OrderRequest request) {
+        log.info("Submit order with request = [{}]", request);
+        PaymentCreatedRes response = orderService.submitOrder(request);
+        return ResponseBuilder.build(response);
     }
 
     @PutMapping("/{id}")

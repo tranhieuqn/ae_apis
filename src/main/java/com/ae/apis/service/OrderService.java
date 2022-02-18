@@ -4,6 +4,7 @@ import com.ae.apis.controller.dto.OrderRequest;
 import com.ae.apis.controller.dto.OrderResponse;
 import com.ae.apis.controller.dto.OrderSimpleResponse;
 import com.ae.apis.controller.query.base.QueryPredicate;
+import com.ae.apis.service.payment.dto.PaymentCreatedRes;
 import org.springframework.data.domain.Page;
 
 public interface OrderService {
@@ -15,4 +16,6 @@ public interface OrderService {
     void createOrder(OrderRequest request);
 
     void updateOrder(Long id, OrderRequest request);
+
+    PaymentCreatedRes submitOrder(OrderRequest request);
 }
