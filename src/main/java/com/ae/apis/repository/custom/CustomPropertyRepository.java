@@ -1,6 +1,5 @@
 package com.ae.apis.repository.custom;
 
-import com.ae.apis.controller.dto.MediaResponse;
 import com.ae.apis.controller.dto.PropertyResponse;
 import com.ae.apis.controller.dto.PropertySimpleResponse;
 import com.ae.apis.entity.QMedia;
@@ -63,13 +62,7 @@ public interface CustomPropertyRepository {
                 qProperty.description,
                 qProperty.thumbnail,
                 qProperty.status,
-                Projections.bean(
-                        MediaResponse.class,
-                        qMediaDetail.id,
-                        qMediaDetail.name,
-                        qMediaDetail.description,
-                        qMediaDetail.url
-                ).as("media")
+                qProduct.id.as("mediaId")
         );
     }
 }

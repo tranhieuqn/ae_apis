@@ -20,5 +20,6 @@ public class PropertyResponse {
   private String description;
   private String thumbnail;
   private PropertyStatus status;
+  private Long mediaId;
   private List<MediaResponse> media;
 }

@@ -31,11 +31,13 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public List<PropertySimpleResponse> getProperties(Long productId) {
+        productService.findProductById(productId);
         return repository.getProperties(productId);
     }
 
     @Override
     public PropertyResponse getProperty(Long id) {
+        getPropertyById(id);
         return repository.getProperty(id);
     }
 
