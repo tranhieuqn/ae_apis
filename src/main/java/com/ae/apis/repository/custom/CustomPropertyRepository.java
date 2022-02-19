@@ -47,8 +47,6 @@ public interface CustomPropertyRepository {
                 .select(buildPropertyResponseBean())
                 .from(qProperty)
                 .innerJoin(qProduct).on(qProduct.id.eq(qProperty.product.id))
-                .innerJoin(qMedia).on(qMedia.id.eq(qProperty.media.id))
-                .innerJoin(qMediaDetail).on(qMedia.id.eq(qMediaDetail.media.id))
                 .orderBy(qProperty.id.asc());
     }
 

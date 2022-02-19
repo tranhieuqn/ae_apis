@@ -8,6 +8,7 @@ import com.ae.apis.controller.dto.PropertySimpleResponse;
 import com.ae.apis.entity.Media;
 import com.ae.apis.entity.Product;
 import com.ae.apis.entity.Property;
+import com.ae.apis.entity.enums.PropertyStatus;
 import com.ae.apis.repository.PropertyRepository;
 import com.ae.apis.service.MediaService;
 import com.ae.apis.service.ProductService;
@@ -49,7 +50,7 @@ public class PropertyServiceImpl implements PropertyService {
         property.setName(request.getName());
         property.setDescription(request.getDescription());
         property.setThumbnail(request.getThumbnail());
-        property.setStatus(request.getStatus());
+        property.setStatus(PropertyStatus.ACTIVE);
         //set Product
         Product product = productService.findProductById(request.getProductId());
         property.setProduct(product);

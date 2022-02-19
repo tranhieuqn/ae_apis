@@ -1,6 +1,8 @@
 package com.ae.apis.controller.dto;
 
 import com.ae.apis.entity.enums.OrderStatus;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +23,6 @@ public class OrderResponse {
   private String note;
   private String phone;
   private String address;
-  private Long orderDate;
+  private OffsetDateTime orderDate;
   private List<OrderDetailResponse> orderDetails;
 }
