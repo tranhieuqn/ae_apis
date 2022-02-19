@@ -22,6 +22,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.ae.apis.entity.enums.OrderStatus.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -74,9 +80,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         Long userId = AuthenticationUtils.getUserId();
         order.setUserId(userId);
-        String refNumber = randomCodeGenerator.generateCode(10, 10);
-        order.setRefNumber(refNumber);
-        order.setStatus(OrderStatus.PAYMENT_PROCESSING);
+        order.setRefNumber(payment.getTransactionId());
+        order.setStatus(PAYMENT_PROCESSING);
         order.setNote(request.getNote());
         order.setPhone(request.getPhone());
         order.setAddress(request.getAddress());
@@ -107,28 +112,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Boolean isNextStatus(OrderStatus current, OrderStatus status) {
-        if (OrderStatus.PAYMENT_PROCESSING.equals(status)
-                || OrderStatus.COMPLETED.equals(current)
-                || OrderStatus.CANCELED.equals(current)) {
-            return false;
-        }
+        Map<OrderStatus, List<OrderStatus>> nextStatus = new HashMap<>();
+        nextStatus.put(PAYMENT_PROCESSING, Arrays.asList(SUBMITTED, CANCELED));
+        nextStatus.put(SUBMITTED, Arrays.asList(SHIPPING, CANCELED));
+        nextStatus.put(SHIPPING, Arrays.asList(COMPLETED, CANCELED));
 
-        if (OrderStatus.PAYMENT_PROCESSING.equals(current)
-                && !(OrderStatus.SUBMITTED.equals(status) || OrderStatus.CANCELED.equals(status))) {
-            return false;
-        }
-
-        if (OrderStatus.SUBMITTED.equals(current)
-                && !(OrderStatus.SHIPPING.equals(status) || OrderStatus.CANCELED.equals(status))) {
-            return false;
-        }
-
-        if (OrderStatus.SHIPPING.equals(current)
-                && !(OrderStatus.COMPLETED.equals(status) || OrderStatus.CANCELED.equals(status))) {
-            return false;
-        }
-
-        return true;
+        return nextStatus.get(current) != null && nextStatus.get(current).contains(status);
     }
 
     @Override

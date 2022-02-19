@@ -1,5 +1,7 @@
 package com.ae.apis.controller;
 
+import com.ae.apis.config.error.ResponseBuilder;
+import com.ae.apis.config.error.dto.RestResponse;
 import com.ae.apis.service.payment.VnpPaymentService;
 import com.ae.apis.service.payment.dto.CheckPaymentProcessResponse;
 import com.ae.apis.service.payment.dto.PaymentIPNProcessResponse;
@@ -22,17 +24,17 @@ public class VnpPaymentRestController {
     private VnpPaymentService vnpPaymentService;
 
     @GetMapping("/ipn")
-    public PaymentIPNProcessResponse paymentIPNProcess(@RequestParam Map<String,String> requestParams) {
+    public RestResponse<?> paymentIPNProcess(@RequestParam Map<String,String> requestParams) {
         logger.info("PaymentController::paymentIPNProcess");
         PaymentIPNProcessResponse paymentResponse = vnpPaymentService.paymentIPNProcess(requestParams);
-        return paymentResponse;
+        return ResponseBuilder.build(paymentResponse);
     }
 
     @GetMapping("/return")
-    public CheckPaymentProcessResponse checkPaymentProcess(@RequestParam Map<String,String> requestParams) {
+    public RestResponse<?> checkPaymentProcess(@RequestParam Map<String,String> requestParams) {
         logger.info("MobileVnpPaymentRestController::checkPaymentProcess");
         CheckPaymentProcessResponse paymentResponse = vnpPaymentService.checkPaymentProcess(requestParams);
-        return paymentResponse;
+        return ResponseBuilder.build(paymentResponse);
     }
 
 }
