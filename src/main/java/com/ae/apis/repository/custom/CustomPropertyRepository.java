@@ -22,7 +22,6 @@ public interface CustomPropertyRepository {
     QProduct qProduct = QProduct.product;
     QProperty qProperty = QProperty.property;
     QMedia qMedia = QMedia.media;
-    QMediaDetail qMediaDetail = QMediaDetail.mediaDetail;
 
     default JPAQuery<PropertySimpleResponse> buildPropertySimpleResponseQuery(EntityManager em) {
         return new JPAQuery<PropertySimpleResponse>(em)
@@ -47,6 +46,7 @@ public interface CustomPropertyRepository {
                 .select(buildPropertyResponseBean())
                 .from(qProperty)
                 .innerJoin(qProduct).on(qProduct.id.eq(qProperty.product.id))
+                .innerJoin(qMedia).on(qMedia.id.eq(qProperty.media.id))
                 .orderBy(qProperty.id.asc());
     }
 
@@ -60,7 +60,7 @@ public interface CustomPropertyRepository {
                 qProperty.description,
                 qProperty.thumbnail,
                 qProperty.status,
-                qProduct.id.as("mediaId")
+                qMedia.id.as("mediaId")
         );
     }
 }

@@ -26,6 +26,9 @@ public class PaymentServiceImpl implements PaymentService {
             case VNPAY:
                 paymentCreator = applicationContext.getBean(VNPAYPaymentCreator.class);
                 break;
+            case COD:
+                paymentCreator = applicationContext.getBean(CODPaymentCreator.class);
+                break;
             default:
                 throw new PaymentTypeNotValidException();
         }

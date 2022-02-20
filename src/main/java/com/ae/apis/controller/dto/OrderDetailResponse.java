@@ -1,6 +1,8 @@
 package com.ae.apis.controller.dto;
 
 import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +20,7 @@ public class OrderDetailResponse {
   private ProductSimpleResponse product;
   private int quantity;
   private BigDecimal unitPrice;
+  private PropertyResponse property;
+  @JsonIgnore
+  private Long propertyId;
 }

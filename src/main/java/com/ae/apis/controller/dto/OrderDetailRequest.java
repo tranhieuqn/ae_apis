@@ -12,6 +12,7 @@ public class OrderDetailRequest {
   private Long id;
   private Long orderId;
   private Long productId;
+  private Long propertyId;
   private int quantity;
   private BigDecimal unitPrice;
 }

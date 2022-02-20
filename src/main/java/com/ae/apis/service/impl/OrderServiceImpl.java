@@ -6,12 +6,14 @@ import com.ae.apis.controller.dto.*;
 import com.ae.apis.controller.query.base.QueryPredicate;
 import com.ae.apis.entity.Order;
 import com.ae.apis.entity.Payment;
+import com.ae.apis.entity.Product;
 import com.ae.apis.entity.enums.OrderStatus;
 import com.ae.apis.entity.enums.PaymentType;
 import com.ae.apis.repository.OrderRepository;
 import com.ae.apis.security.AuthenticationUtils;
 import com.ae.apis.service.OrderDetailService;
 import com.ae.apis.service.OrderService;
+import com.ae.apis.service.ProductService;
 import com.ae.apis.service.payment.PaymentService;
 import com.ae.apis.service.payment.dto.PaymentCreatedRes;
 import com.ae.apis.utils.RandomCodeGenerator;
@@ -40,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private RandomCodeGenerator randomCodeGenerator;
@@ -127,13 +132,14 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal originalFee = new BigDecimal(0);
         if (request.getOrderDetails() != null || !request.getOrderDetails().isEmpty()) {
             for (OrderDetailRequest item : request.getOrderDetails()) {
-                originalFee = originalFee.add(BigDecimal.valueOf(item.getQuantity()).multiply(item.getUnitPrice()));
+                Product product = productService.findProductById(item.getProductId());
+                originalFee = originalFee.add(BigDecimal.valueOf(item.getQuantity()).multiply(product.getPrice()));
             }
         }
 
         String code = randomCodeGenerator.generateCode(10, 10);
         PaymentCreatedRes paymentCreatedRes = paymentService.createPayment(
-                PaymentType.VNPAY, userId, originalFee.longValue(), originalFee.longValue(), code, "ORDER"
+                request.getPaymentType(), userId, originalFee.longValue(), originalFee.longValue(), code, "ORDER"
         );
 
         this.createOrder(request, paymentCreatedRes.getPayment());

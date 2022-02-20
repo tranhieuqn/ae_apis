@@ -3,6 +3,7 @@ package com.ae.apis.service.impl;
 import com.ae.apis.config.error.NotFoundException;
 import com.ae.apis.controller.dto.OrderDetailRequest;
 import com.ae.apis.controller.dto.OrderDetailResponse;
+import com.ae.apis.controller.dto.PropertyResponse;
 import com.ae.apis.entity.Order;
 import com.ae.apis.entity.OrderDetail;
 import com.ae.apis.repository.OrderDetailRepository;
@@ -30,7 +31,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public List<OrderDetailResponse> getOrderDetailsByOrderId(Long id) {
-        return repository.findAllOrderDetailByOrderId(id);
+        List<OrderDetailResponse> response = repository.findAllOrderDetailByOrderId(id);
+        if(response != null && !response.isEmpty()){
+            for(var item : response){
+                if(item.getPropertyId() != null) {
+                    PropertyResponse property = propertyService.getProperty(item.getPropertyId());
+                    item.setProperty(property);
+                }
+            }
+        }
+        return response;
     }
 
     @Override
@@ -48,7 +58,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
             var product = productService.findProductById(item.getProductId());
             orderDetail.setProduct(product);
-            //TODO: set property
+
+            if(item.getPropertyId() != null) {
+                var property = propertyService.getPropertyById(item.getPropertyId());
+                orderDetail.setProperty(property);
+            }
+
             orderDetailList.add(orderDetail);
         }
 
