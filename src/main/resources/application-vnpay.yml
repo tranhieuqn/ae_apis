@@ -7,7 +7,7 @@ payment:
       vnp-hash-secret: IBSOCPFEXJBAQTVBNVLFFTEFOVOQRGLR
       vnp-pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
       vnp_api_url: https://sandbox.vnpayment.vn/merchant_webapi/merchant.html
-      vnp-return-url: http://localhost:8080/api/payment/vnp/return
+      vnp-return-url: http://ec2-13-214-38-12.ap-southeast-1.compute.amazonaws.com:8080/api/payment/vnp/return
       vnp-refund-email: xuanhongkim@gmail.com
     prod:
       vnp-version: 2.0.0
@@ -15,5 +15,5 @@ payment:
       vnp-hash-secret: WLODMUXPSWVOASPKIIECMHCVFNBQCAMB
       vnp-pay-url: https://pay.vnpay.vn/vpcpay.html
       vnp_api_url: https://merchant.vnpay.vn/merchant_webapi/merchant.html
-      vnp-return-url: #TODO:
+      vnp-return-url: http://ec2-13-214-38-12.ap-southeast-1.compute.amazonaws.com:8080/api/payment/vnp/return
       vnp-refund-email: xuanhongkim@gmail.com
