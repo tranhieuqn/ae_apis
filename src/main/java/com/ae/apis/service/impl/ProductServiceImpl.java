@@ -11,15 +11,15 @@ import com.ae.apis.entity.QProduct;
 import com.ae.apis.entity.enums.ProductStatus;
 import com.ae.apis.repository.CategoryRepository;
 import com.ae.apis.repository.ProductRepository;
+import com.ae.apis.repository.PropertyRepository;
 import com.ae.apis.service.MediaService;
 import com.ae.apis.service.ProductService;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,6 +32,9 @@ public class ProductServiceImpl implements ProductService {
 
   @Autowired
   private MediaService mediaService;
+
+  @Autowired
+  private PropertyRepository propertyRepository;
 
   @Autowired
   private EntityManager em;
@@ -50,6 +53,8 @@ public class ProductServiceImpl implements ProductService {
       throw new NotFoundException(Product.class, id);
     }
     productResponse.setMediaDetails(mediaService.getMediaDetails(productResponse.getMediaId()));
+    productResponse.setProperties(propertyRepository.getPropertiesByProductId(id));
+
     return productResponse;
   }
 

@@ -25,4 +25,5 @@ public class ProductResponse {
   private ProductStatus status;
   private Long mediaId;
   private List<MediaResponse> mediaDetails;
+  private List<PropertyResponse> properties;
 }

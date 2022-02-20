@@ -63,4 +63,6 @@ public interface CustomPropertyRepository {
                 qMedia.id.as("mediaId")
         );
     }
+
+    List<PropertyResponse> getPropertiesByProductId(Long productId);
 }

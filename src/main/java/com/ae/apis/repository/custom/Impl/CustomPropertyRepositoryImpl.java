@@ -33,4 +33,18 @@ public class CustomPropertyRepositoryImpl implements CustomPropertyRepository {
         }
         return response;
     }
+
+    @Override
+    public List<PropertyResponse> getPropertiesByProductId(Long productId) {
+        if(productId == null)  return null;
+
+        List<PropertyResponse> response = buildPropertyResponseQuery(em).where(qProduct.id.eq(productId)).fetch();
+        if (response != null && !response.isEmpty()) {
+            for(var item : response) {
+                List<MediaResponse> mediaList = mediaService.getMediaDetails(item.getMediaId());
+                item.setMedia(mediaList);
+            }
+        }
+        return response;
+    }
 }
