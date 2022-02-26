@@ -22,12 +22,14 @@ public class PropertyController {
     @GetMapping
     public RestResponse<?> getProperties(@RequestParam("filter.productId") Long productId) {
         log.info("Get properties with filter.productId = [{}]", productId);
+
         return ResponseBuilder.build(propertyService.getProperties(productId));
     }
 
     @GetMapping("/{id}")
     public RestResponse<?> getProperty(@PathVariable Long id) {
         log.info("Get property with id = [{}]", id);
+
         return ResponseBuilder.build(propertyService.getProperty(id));
     }
 
@@ -36,7 +38,7 @@ public class PropertyController {
         log.info("Create property with request = [{}]", request);
         propertyService.createProperty(request);
 
-        return EmptyResponse.instance;
+        return ResponseBuilder.build();
     }
 
     @PutMapping("/{id}")
@@ -44,6 +46,6 @@ public class PropertyController {
         log.info("Update property with id {} and request = [{}]", id, request);
         propertyService.updateProperty(id, request);
 
-        return EmptyResponse.instance;
+        return ResponseBuilder.build();
     }
 }

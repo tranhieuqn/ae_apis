@@ -29,4 +29,8 @@ public abstract class QueryParam<T extends FilterParam> {
         OrderSpecifier<?> order = buildOrderClause();
         return new QueryPredicate(order, predicate, getIndex(), getSize());
     }
+
+    public final QueryPredicate build(){
+        return build(null);
+    }
 }

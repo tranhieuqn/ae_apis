@@ -46,7 +46,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verify-account")
-    public RestResponse<LoginResponse> verifyAccount(@Valid @RequestBody UserAccountVerifyRequest request) {
+    public RestResponse<?> verifyAccount(@Valid @RequestBody UserAccountVerifyRequest request) {
         LoginResponse loginResponse = accountService.verifyAccount(request);
 
         return ResponseBuilder.build(loginResponse);
@@ -56,6 +56,6 @@ public class AuthenticationController {
     public RestResponse<?> logout() {
         accountService.logout();
 
-        return EmptyResponse.instance;
+        return ResponseBuilder.build();
     }
 }

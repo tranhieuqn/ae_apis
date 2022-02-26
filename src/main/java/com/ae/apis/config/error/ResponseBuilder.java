@@ -1,5 +1,6 @@
 package com.ae.apis.config.error;
 
+import com.ae.apis.config.error.dto.EmptyResponse;
 import com.ae.apis.config.error.dto.PagingItem;
 import com.ae.apis.config.error.dto.RestResponse;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,10 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public class ResponseBuilder {
+
+    public static RestResponse<?> build() {
+        return EmptyResponse.instance;
+    }
 
     public static <T> RestResponse<T> build(T body) {
         return new RestResponse<>(body);

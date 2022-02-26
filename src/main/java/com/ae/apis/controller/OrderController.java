@@ -26,14 +26,16 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public RestResponse<List<OrderSimpleResponse>> getOrders(@NotNull OrderQueryParam queryParam) {
+    public RestResponse<?> getOrders(@NotNull OrderQueryParam queryParam) {
         log.info("Get orders");
-        return ResponseBuilder.build(orderService.getOrders(queryParam.build(null)));
+
+        return ResponseBuilder.build(orderService.getOrders(queryParam.build()));
     }
 
     @GetMapping("/{id}")
-    public RestResponse<OrderResponse> getOrder(@PathVariable Long id) {
+    public RestResponse<?> getOrder(@PathVariable Long id) {
         log.info("Get order with id = {}", id);
+
         return ResponseBuilder.build(orderService.getOrder(id));
     }
 
@@ -41,6 +43,7 @@ public class OrderController {
     public RestResponse<?> submitOrder(@Valid @RequestBody OrderRequest request) {
         log.info("Submit order with request = [{}]", request);
         OrderRes response = orderService.submitOrder(request);
+
         return ResponseBuilder.build(response);
     }
 
@@ -48,6 +51,7 @@ public class OrderController {
     public RestResponse<?> updateOrder(@PathVariable Long id, @Valid @RequestBody OrderRequest request) {
         log.info("Update order with id {} and request = [{}]", id, request);
         orderService.updateOrder(id, request);
-        return EmptyResponse.instance;
+
+        return ResponseBuilder.build();
     }
 }

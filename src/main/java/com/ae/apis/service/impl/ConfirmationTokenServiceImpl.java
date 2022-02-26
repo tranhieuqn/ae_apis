@@ -6,12 +6,12 @@ import com.ae.apis.entity.ConfirmationToken;
 import com.ae.apis.repository.ConfirmationTokenRepository;
 import com.ae.apis.service.CommunicationService;
 import com.ae.apis.service.ConfirmationTokenService;
+import com.ae.apis.service.external.sms.common.SMSProperties;
 import com.ae.apis.utils.AppUtils;
 import com.ae.apis.utils.AsyncTaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -27,8 +27,8 @@ import java.util.Optional;
 public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     private static final Logger logger = LoggerFactory.getLogger(ConfirmationTokenService.class);
 
-    @Value("${auth.otp.expire}")
-    private long OTPExpiredTime;
+    @Autowired
+    private SMSProperties properties;
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -43,7 +43,7 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
             confirmationTokenRepository.deleteAll(existingTokens);
         }
 
-        OffsetDateTime expireTime = OffsetDateTime.now().plus(OTPExpiredTime, ChronoUnit.MILLIS);
+        OffsetDateTime expireTime = OffsetDateTime.now().plus(properties.getAuth().getExpire(), ChronoUnit.MILLIS);
         ConfirmationToken confirmationToken = new ConfirmationToken();
         confirmationToken.setConfirmationToken(code);
         confirmationToken.setExpireDate(new Date(expireTime.toInstant().toEpochMilli()));

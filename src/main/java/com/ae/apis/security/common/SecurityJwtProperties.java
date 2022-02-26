@@ -1,4 +1,4 @@
-package com.ae.apis.service.payment.common;
+package com.ae.apis.security.common;
 
 import com.ae.apis.config.YamlPropertySourceFactory;
 import lombok.Getter;
@@ -9,32 +9,19 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static com.ae.apis.common.Constants.ENVIRONMENT.PROD;
-
 @Configuration
 @Validated
-@PropertySource(value = "classpath:application-vnpay.yml", factory = YamlPropertySourceFactory.class)
-@ConfigurationProperties("payment.vnpay")
+@PropertySource(value = "classpath:application-jwt.yml", factory = YamlPropertySourceFactory.class)
+@ConfigurationProperties("security.jwt")
 @Primary
 @Getter
 @Setter
-public class VNPayProperties {
+public class SecurityJwtProperties {
     @NotBlank
-    private String env;
+    private String secret;
     @NotNull
-    private VNPayEnv dev;
-    @NotNull
-    private VNPayEnv prod;
-
-    public VNPayEnv getVNPayEnv() {
-        if (PROD.equals(env)) {
-            return prod;
-        }
-        return dev;
-    }
-
+    private Long expire;
 }

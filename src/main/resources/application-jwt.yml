@@ -1,0 +1,4 @@
+security:
+  jwt:
+    secret: Akfdi=FnQ23FDSLSDf
+    expire: 864000000

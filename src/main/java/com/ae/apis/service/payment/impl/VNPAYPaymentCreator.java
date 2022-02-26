@@ -8,12 +8,12 @@ import com.ae.apis.repository.PaymentRepository;
 import com.ae.apis.service.payment.PaymentCreator;
 import com.ae.apis.service.payment.VnpPaymentService;
 import com.ae.apis.service.payment.common.CommonUtils;
+import com.ae.apis.service.payment.common.VNPayProperties;
 import com.ae.apis.service.payment.dto.*;
 import com.ae.apis.utils.AppUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -29,8 +29,8 @@ import static com.ae.apis.entity.enums.RefundStatus.REFUND_SUCCESS;
 @Component
 public class VNPAYPaymentCreator extends PaymentCreator {
 
-    @Value("${payment.vnpay.env}")
-    private String vnpayPaymentEnv;
+    @Autowired
+    private VNPayProperties properties;
 
     @Autowired
     private PaymentRepository paymentRepository;
@@ -46,7 +46,7 @@ public class VNPAYPaymentCreator extends PaymentCreator {
         payment.setType(PaymentType.VNPAY);
         payment.setStatus(PaymentStatus.NOT_PAYMENT_YET);
         payment.setTransactionId(code);
-        payment.setEnv(vnpayPaymentEnv);
+        payment.setEnv(properties.getEnv());
         payment = paymentRepository.save(payment);
 
         VNPPaymentRequest paymentRequest = new VNPPaymentRequest();
@@ -64,7 +64,7 @@ public class VNPAYPaymentCreator extends PaymentCreator {
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());
         }
-        return new PaymentCreatedRes(payment, paymentResult.getPaymentUrl());
+        return new PaymentCreatedRes(payment, paymentResult == null ? null : paymentResult.getPaymentUrl());
     }
 
     @Override

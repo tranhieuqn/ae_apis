@@ -12,8 +12,10 @@ otp:
       - {code: "119", message: "Brandname quảng cáo phải gửi ít nhất 20 số điện thoại."}
       - {code: "131", message: "Tin nhắn brandname quảng cáo độ dài tối đa 422 kí tự."}
       - {code: "132", message: "Không có quyền gửi tin nhắn đầu số cố định 8755."}
-      - {code: "99", message: "Lỗi không xác định."}
+      - {code: "99",  message: "Lỗi không xác định."}
       - {code: "177", message: "Brandname chưa đăng ký với nhà mạng."}
       - {code: "145", message: "Sai template mạng xã hội."}
       - {code: "146", message: "Sai template Brandname CSKH."}
       - {code: "103", message: "Tài khoản không đủ tiền"}
+    auth:
+      expire: 30000

@@ -27,6 +27,7 @@ public class VnpPaymentRestController {
     public RestResponse<?> paymentIPNProcess(@RequestParam Map<String,String> requestParams) {
         logger.info("PaymentController::paymentIPNProcess");
         PaymentIPNProcessResponse paymentResponse = vnpPaymentService.paymentIPNProcess(requestParams);
+
         return ResponseBuilder.build(paymentResponse);
     }
 
@@ -34,6 +35,7 @@ public class VnpPaymentRestController {
     public RestResponse<?> checkPaymentProcess(@RequestParam Map<String,String> requestParams) {
         logger.info("MobileVnpPaymentRestController::checkPaymentProcess");
         CheckPaymentProcessResponse paymentResponse = vnpPaymentService.checkPaymentProcess(requestParams);
+
         return ResponseBuilder.build(paymentResponse);
     }
 

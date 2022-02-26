@@ -35,10 +35,4 @@ public class CODPaymentCreator extends PaymentCreator {
 
         return new PaymentCreatedRes(payment, null);
     }
-
-    @Override
-    public RefundPaymentRes doRefund(RefundRequest payload) {
-        return null;
-    }
-
 }

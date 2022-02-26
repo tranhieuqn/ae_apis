@@ -25,28 +25,32 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/paging")
-    public RestResponse<List<ProductSimpleResponse>> getProducts(@NotNull ProductQueryParam queryParam) {
+    public RestResponse<?> getProducts(@NotNull ProductQueryParam queryParam) {
         log.info("Get products with param = [{}]", queryParam);
-        return ResponseBuilder.build(productService.getProducts(queryParam.build(null)));
+
+        return ResponseBuilder.build(productService.getProducts(queryParam.build()));
     }
 
     @GetMapping("/{id}")
-    public RestResponse<ProductResponse> getProduct(@PathVariable Long id) {
+    public RestResponse<?> getProduct(@PathVariable Long id) {
         log.info("Get product with id = {}", id);
+
         return ResponseBuilder.build(productService.getProduct(id));
     }
 
     @PostMapping
-    public RestResponse<Object> createProduct(@Valid @RequestBody ProductRequest request) {
+    public RestResponse<?> createProduct(@Valid @RequestBody ProductRequest request) {
         log.info("Create product with request = [{}]", request);
         productService.createProduct(request);
-        return EmptyResponse.instance;
+
+        return ResponseBuilder.build();
     }
 
     @PutMapping("/{id}")
-    public RestResponse<Object> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
+    public RestResponse<?> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
         log.info("Update product with id {} and request = [{}]", id, request);
         productService.updateProduct(id, request);
-        return EmptyResponse.instance;
+
+        return ResponseBuilder.build();
     }
 }

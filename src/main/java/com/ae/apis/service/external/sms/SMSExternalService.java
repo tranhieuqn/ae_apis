@@ -1,8 +1,9 @@
-package com.ae.apis.service.external;
+package com.ae.apis.service.external.sms;
 
-import com.ae.apis.service.external.dto.SMSRequest;
-import com.ae.apis.service.external.dto.SMSResponse;
-import com.ae.apis.utils.SMSProperties;
+import com.ae.apis.service.external.AbstractExternalService;
+import com.ae.apis.service.external.sms.common.SMSProperties;
+import com.ae.apis.service.external.sms.dto.SMSRequest;
+import com.ae.apis.service.external.sms.dto.SMSResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

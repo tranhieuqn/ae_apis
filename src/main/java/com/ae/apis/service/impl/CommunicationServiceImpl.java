@@ -1,7 +1,7 @@
 package com.ae.apis.service.impl;
 
 import com.ae.apis.service.CommunicationService;
-import com.ae.apis.service.external.SMSExternalService;
+import com.ae.apis.service.external.sms.SMSExternalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

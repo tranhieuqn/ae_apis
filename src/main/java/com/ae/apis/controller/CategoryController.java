@@ -25,35 +25,39 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/paging")
-    public RestResponse<List<CategorySimpleResponse>> getCategories(@NotNull CategoryQueryParam queryParam) {
+    public RestResponse<?> getCategories(@NotNull CategoryQueryParam queryParam) {
         log.info("Get categories with param = [{}]", queryParam);
-        return ResponseBuilder.build(categoryService.getCategories(queryParam.build(null)));
+
+        return ResponseBuilder.build(categoryService.getCategories(queryParam.build()));
     }
 
     @GetMapping
-    public RestResponse<List<CategorySimpleResponse>> getCategories(
+    public RestResponse<?> getCategories(
             @RequestParam(value = "filter.parentId", required = false) Long parentId) {
         log.info("Get categories with parentId = {}", parentId);
+
         return ResponseBuilder.build(categoryService.getCategories(parentId));
     }
 
     @GetMapping("/{id}")
-    public RestResponse<CategoryResponse> getCategory(@PathVariable Long id) {
+    public RestResponse<?> getCategory(@PathVariable Long id) {
         log.info("Get category with id = {}", id);
         return ResponseBuilder.build(categoryService.getCategory(id));
     }
 
     @PostMapping
-    public RestResponse<Object> createCategory(@Valid @RequestBody CategoryRequest request) {
+    public RestResponse<?> createCategory(@Valid @RequestBody CategoryRequest request) {
         log.info("Create category with request = [{}]", request);
         categoryService.createCategory(request);
-        return EmptyResponse.instance;
+
+        return ResponseBuilder.build();
     }
 
     @PutMapping("/{id}")
-    public RestResponse<Object> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
+    public RestResponse<?> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
         log.info("Update category with id {} and request = [{}]", id, request);
         categoryService.updateCategory(id, request);
-        return EmptyResponse.instance;
+
+        return ResponseBuilder.build();
     }
 }

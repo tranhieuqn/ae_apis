@@ -1,4 +1,4 @@
-package com.ae.apis.service.external.dto;
+package com.ae.apis.service.external.sms.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

@@ -13,7 +13,7 @@ import com.ae.apis.security.JWTAuthenticationService;
 import com.ae.apis.service.AccountService;
 import com.ae.apis.service.ConfirmationTokenService;
 import com.ae.apis.utils.RandomCodeGenerator;
-import com.ae.apis.utils.SMSProperties;
+import com.ae.apis.service.external.sms.common.SMSProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
