@@ -1,0 +1,7 @@
+storage:
+  s3:
+    access-key-id: AKIA6OWMNYLNKWMH6DUG
+    secret-key: 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
+    bucket-name: hong-dev
+    aws-url: https://${storage.s3.bucket-name}.s3.ap-southeast-1.amazonaws.com
+    end-point: s3.ap-southeast-1.amazonaws.com
