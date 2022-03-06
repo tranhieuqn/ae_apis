@@ -1,9 +1,12 @@
 package com.ae.apis.service.export.dto;
 
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ExcelField {
 	private String headerName;
 	private String fieldName;

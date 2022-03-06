@@ -1,7 +1,9 @@
-package com.ae.apis.service.export;
+package com.ae.apis.service.export.common;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +27,7 @@ public class ExcelUtils implements Serializable {
         private static final ExcelUtils INSTANCE = new ExcelUtils();
     }
 
-    public static CellStyle headerStyle(Sheet sheet) {
+    public static CellStyle headerStyle(SXSSFSheet sheet) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
         font.setFontName("Times New Roman");
@@ -42,7 +44,7 @@ public class ExcelUtils implements Serializable {
         return cellStyle;
     }
 
-    public static CellStyle stringStyle(Sheet sheet, String... params) {
+    public static CellStyle stringStyle(SXSSFSheet sheet, String... params) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
         font.setFontName("Times New Roman");
@@ -57,15 +59,16 @@ public class ExcelUtils implements Serializable {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setBorderBottom(BorderStyle.THIN);
         cellStyle.setWrapText(true);
+
         if (params != null && params.length > 0) {
-            short format = (short) BuiltinFormats.getBuiltinFormat(params[0]);
-            cellStyle.setDataFormat(format);
+            CreationHelper createHelper = sheet.getWorkbook().getCreationHelper();
+            cellStyle.setDataFormat(createHelper.createDataFormat().getFormat(params[0]));
         }
         return cellStyle;
     }
 
 
-    public static CellStyle numberStyle(Sheet sheet, String... params) {
+    public static CellStyle numberStyle(SXSSFSheet sheet, String... params) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
         font.setFontName("Times New Roman");
@@ -73,20 +76,21 @@ public class ExcelUtils implements Serializable {
         font.setFontHeightInPoints((short) 12); // font size
 
         // Create CellStyle
-        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        var cellStyle = sheet.getWorkbook().createCellStyle();
         cellStyle.setFont(font);
         cellStyle.setBorderBottom(BorderStyle.THIN);
         cellStyle.setAlignment(HorizontalAlignment.RIGHT);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setBorderBottom(BorderStyle.THIN);
+
         if (params != null && params.length > 0) {
-            short format = (short) BuiltinFormats.getBuiltinFormat(params[0]);
-            cellStyle.setDataFormat(format);
+            CreationHelper createHelper = sheet.getWorkbook().getCreationHelper();
+            cellStyle.setDataFormat(createHelper.createDataFormat().getFormat(params[0]));
         }
         return cellStyle;
     }
 
-    public static CellStyle dateStyle(Sheet sheet, String... params) {
+    public static CellStyle dateStyle(SXSSFSheet sheet, String... params) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
         font.setFontName("Times New Roman");
@@ -102,23 +106,33 @@ public class ExcelUtils implements Serializable {
         cellStyle.setBorderBottom(BorderStyle.THIN);
 
         if (params != null && params.length > 0) {
-            short format = (short) BuiltinFormats.getBuiltinFormat(params[0]);
-            cellStyle.setDataFormat(format);
+            CreationHelper createHelper = sheet.getWorkbook().getCreationHelper();
+            cellStyle.setDataFormat(createHelper.createDataFormat().getFormat(params[0]));
         }
         return cellStyle;
     }
 
 
     // Auto resize column width
-    public static void autoResizeColumn(Sheet sheet, int lastColumn) {
+    public static void autoResizeColumn(SXSSFSheet sheet, int lastColumn) {
+        int w;
+        int maxColumnWidth = 255 * 256;
         for (int columnIndex = 0; columnIndex < lastColumn; columnIndex++) {
+            sheet.trackAllColumnsForAutoSizing();
             sheet.autoSizeColumn(columnIndex);
+            // The maximum column width
+            // for an individual cell is 255 characters
+            w = (int) (sheet.getColumnWidth(columnIndex) * 1.3);
+            if (w > maxColumnWidth) {
+                w = maxColumnWidth;
+            }
+            sheet.setColumnWidth(columnIndex, (int) (w));
         }
     }
 
     // Create output file
-    public static void createOutputFile(Workbook workbook,String excelName, HttpServletResponse res) {
-        try(OutputStream os = res.getOutputStream()) {
+    public static void createOutputFile(SXSSFWorkbook workbook, String excelName, HttpServletResponse res) {
+        try (OutputStream os = res.getOutputStream()) {
             // save
             res.setContentType("application/x-ms-excel");
             res.setContentType("application/x-felix; charset=us-ascii");
