@@ -14,6 +14,8 @@ import com.ae.apis.security.AuthenticationUtils;
 import com.ae.apis.service.OrderDetailService;
 import com.ae.apis.service.OrderService;
 import com.ae.apis.service.ProductService;
+import com.ae.apis.service.export.ExportService;
+import com.ae.apis.service.export.dto.ExcelField;
 import com.ae.apis.service.payment.PaymentService;
 import com.ae.apis.service.payment.dto.PaymentCreatedRes;
 import com.ae.apis.utils.RandomCodeGenerator;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -45,6 +48,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ExportService exportService;
 
     @Autowired
     private RandomCodeGenerator randomCodeGenerator;
@@ -145,6 +151,19 @@ public class OrderServiceImpl implements OrderService {
         this.createOrder(request, paymentCreatedRes.getPayment());
 
         return OrderRes.ofSuccess(paymentCreatedRes.getPaymentUrl());
+    }
+
+    @Override
+    public void exportOrders(QueryPredicate queryPredicate, HttpServletResponse response) {
+        List<OrderSimpleResponse> orders = repository.getOrders(queryPredicate).toList();
+        List<ExcelField> fields = Arrays.asList(
+                new ExcelField("ID", "id", null, ExcelField.DataType.LONG),
+                new ExcelField("User ID", "userId", null, ExcelField.DataType.LONG),
+                new ExcelField("Ref Number", "refNumber", null, ExcelField.DataType.STRING),
+                new ExcelField("Date", "orderDate", "yyyy-MM-dd hh:mm:ss", ExcelField.DataType.DATE)
+
+        );
+        exportService.exportFile(orders, fields, "order", response);
     }
 
 }

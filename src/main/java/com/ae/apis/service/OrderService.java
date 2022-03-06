@@ -9,6 +9,8 @@ import com.ae.apis.entity.Order;
 import com.ae.apis.entity.Payment;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface OrderService {
 
     Page<OrderSimpleResponse> getOrders(QueryPredicate queryPredicate);
@@ -20,4 +22,6 @@ public interface OrderService {
     void updateOrder(Long id, OrderRequest request);
 
     OrderRes submitOrder(OrderRequest request);
+
+    void exportOrders(QueryPredicate queryPredicate, HttpServletResponse response);
 }
