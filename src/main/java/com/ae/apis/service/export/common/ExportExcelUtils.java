@@ -1,7 +1,6 @@
 package com.ae.apis.service.export.common;
 
 import com.ae.apis.service.export.dto.ExcelField;
-import com.ae.apis.utils.DateTimeUtils;
 import com.ae.apis.utils.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -15,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class ExportExcelUtils implements Serializable {
@@ -86,7 +88,13 @@ public class ExportExcelUtils implements Serializable {
                     if (cellValue == null) {
                         cell.setCellValue("");
                     } else {
-                        cell.setCellValue(DateTimeUtils.getInstance().getDateFromStr(cellValue.toString(), "yyyy-MM-dd'T'HH:mm:ss"));
+                        if (cellValue instanceof Date) {
+                            cell.setCellValue((Date) cellValue);
+                        } else if (cellValue instanceof OffsetDateTime) {
+                            cell.setCellValue(LocalDateTime.from((OffsetDateTime) cellValue));
+                        } else {
+                            cell.setCellValue(cellValue.toString());
+                        }
                     }
                     CellStyle dateStyleDefault = ExcelUtils.dateStyle(sheet, column.getDataFormat());
                     cell.setCellStyle(dateStyleDefault);
